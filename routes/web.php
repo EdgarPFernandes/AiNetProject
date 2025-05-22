@@ -14,7 +14,7 @@ use App\Models\Teacher;
 use App\Models\Student;
 use App\Models\Course;
 use App\Models\User;
-
+use App\Http\Controllers\CategoryController;
 
 /* ----- PUBLIC ROUTES ----- */
 
@@ -66,6 +66,9 @@ Route::middleware('auth', 'verified')->group(function () {
         ->name('administratives.photo.destroy')
         ->can('update', 'administrative');
     Route::resource('administratives', AdministrativeController::class);
+
+    //Category routes
+    Route::get('')
 
     //Course resource routes are protected by CoursePolicy on the controller
     // The route 'show' is public (for anonymous user)

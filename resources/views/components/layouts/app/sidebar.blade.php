@@ -48,14 +48,17 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="'Academics'" class="grid">
                     @can('viewShowcase', App\Models\Course::class)
-                        <flux:navlist.item icon="academic-cap" :href="route('courses.showcase')" :current="request()->routeIs('courses.showcase')" wire:navigate>Courses</flux:navlist.item>
+                        <flux:navlist.item icon="academic-cap" :href="route('courses.showcase')" :current="request()->routeIs('courses.showcase')" wire:navigate>Categorias</flux:navlist.item>
                     @endcan
                     @can('viewAny', App\Models\Discipline::class)
                         <flux:navlist.item icon="document" :href="route('disciplines.index')" :current="request()->routeIs('disciplines.index')" wire:navigate>Disciplines</flux:navlist.item>
                     @endcan
                     @can('viewCurriculum', App\Models\Course::class)
                         <flux:navlist.group heading="Curricula" expandable :expanded="request()->routeIs('courses.curriculum')">
-                           
+                           @foreach($category as $category)
+                                <flux:navlist.item href="{{ route('courses.curriculum', ['course' => $course]) }}" class="font-light font-sm">{{ $course->abbreviation }}</flux:navlist.item>
+                                {{--                    $course->fullName--}}
+                            @endforeach
                         </flux:navlist.group>
                     @endcan
                 </flux:navlist.group>

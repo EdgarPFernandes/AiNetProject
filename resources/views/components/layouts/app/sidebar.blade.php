@@ -55,10 +55,7 @@
                     @endcan
                     @can('viewCurriculum', App\Models\Course::class)
                         <flux:navlist.group heading="Curricula" expandable :expanded="request()->routeIs('courses.curriculum')">
-                           @foreach($category as $category)
-                                <flux:navlist.item href="{{ route('courses.curriculum', ['course' => $course]) }}" class="font-light font-sm">{{ $course->abbreviation }}</flux:navlist.item>
-                                {{--                    $course->fullName--}}
-                            @endforeach
+                           
                         </flux:navlist.group>
                     @endcan
                 </flux:navlist.group>

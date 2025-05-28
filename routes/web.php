@@ -14,6 +14,7 @@ use App\Models\Teacher;
 use App\Models\Student;
 use App\Models\Course;
 use App\Models\User;
+
 use App\Http\Controllers\CategoryController;
 
 /* ----- PUBLIC ROUTES ----- */
@@ -68,7 +69,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::resource('administratives', AdministrativeController::class);
 
     //Category routes
-    Route::get('')
+    Route::get('categories',[CategoryController::class, 'index']);
 
     //Course resource routes are protected by CoursePolicy on the controller
     // The route 'show' is public (for anonymous user)

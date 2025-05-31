@@ -12,11 +12,7 @@ class TeacherFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (strtolower($this->getMethod()) == 'post') {
-            return $this->user()?->can('create', \App\Models\Teacher::class);
-        } else {
-            return $this->user()?->can('update', $this->route('teacher'));
-        }
+        return true;
     }
 
     protected function prepareForValidation(): void

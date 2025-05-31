@@ -8,18 +8,10 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\CourseFormRequest;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class CourseController extends \Illuminate\Routing\Controller
+class CourseController extends Controller
 {
     use \App\Traits\CourseImageFileStorage;
-    use AuthorizesRequests;
-
-    public function __construct()
-    {
-        $this->authorizeResource(Course::class);
-    }
-
 
     public function index(): View
     {

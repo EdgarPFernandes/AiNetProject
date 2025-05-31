@@ -27,8 +27,7 @@
                         <div class="flex justify-between items-start space-x-4">
                             <form action="{{ route('cart.confirm') }}" method="post" class="flex space-x-4">
                                 @csrf
-                                <flux:input name="student_number" label="Student Number" 
-                                            value="{{ old('student_number', Auth::User()?->student?->number ) }}"/>
+                                <flux:input name="student_number" label="Student Number" value="{{ old('student_number') }}"/>
                                 <flux:button variant="primary" type="submit" class="mt-[1.7rem]">Confirm</flux:button>
                             </form>
                             <form action="{{ route('cart.destroy') }}" method="post">

@@ -12,11 +12,9 @@
                     :name="old('name', $filterByName)"
                     class="mb-6"
                 />
-                @can('create', App\Models\Student::class)
-                    <div class="flex items-center gap-4 mb-4">
-                        <flux:button variant="primary" href="{{ route('students.create') }}">Create a new student</flux:button>
-                    </div>
-                @endcan
+                <div class="flex items-center gap-4 mb-4">
+                    <flux:button variant="primary" href="{{ route('students.create') }}">Create a new student</flux:button>
+                </div>
                 <div class="my-4 font-base text-sm text-gray-700 dark:text-gray-300">
                     <x-students.table :students="$students"
                                       :showCourse="true"

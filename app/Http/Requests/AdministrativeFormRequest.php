@@ -12,11 +12,7 @@ class AdministrativeFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (strtolower($this->getMethod()) == 'post') {
-            return $this->user()?->can('create', \App\Models\User::class);
-        } else {
-            return $this->user()?->can('update', $this->route('administrative'));
-        }
+        return true;
     }
 
     protected function prepareForValidation(): void

@@ -11,11 +11,7 @@ class DepartmentFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (strtolower($this->getMethod()) == 'post') {
-            return $this->user()?->can('create', \App\Models\Department::class);
-        } else {
-            return $this->user()?->can('update', $this->route('department'));
-        }
+        return true;
     }
 
     /**

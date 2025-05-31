@@ -5,19 +5,13 @@
         <div class="max-full">
             <section>
                 <div class="static sm:absolute -top-2 right-0 flex flex-wrap justify-start sm:justify-end items-center gap-4">
-                    @can('create', App\Models\Department::class)
-                        <flux:button variant="primary" href="{{ route('departments.create') }}">New</flux:button>
-                    @endcan
-                    @can('view', $department)
-                        <flux:button href="{{ route('departments.show', ['department' => $department]) }}">View</flux:button>
-                    @endcan
-                    @can('delete', $department)
-                        <form method="POST" action="{{ route('departments.destroy', ['department' => $department]) }}">
-                            @csrf
-                            @method('DELETE')
-                            <flux:button variant="danger" type="submit">Delete</flux:button>
-                        </form>
-                    @endcan
+                    <flux:button variant="primary" href="{{ route('departments.create', ['department' => $department]) }}">New</flux:button>
+                    <flux:button href="{{ route('departments.show', ['department' => $department]) }}">View</flux:button>
+                    <form method="POST" action="{{ route('departments.destroy', ['department' => $department]) }}">
+                        @csrf
+                        @method('DELETE')
+                        <flux:button variant="danger" type="submit">Delete</flux:button>
+                    </form>
                 </div>
                 <form method="POST" action="{{ route('departments.update', ['department' => $department]) }}">
                     @csrf

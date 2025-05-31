@@ -1,16 +1,6 @@
 @php
     $mode = $mode ?? 'edit';
     $readonly = $mode == 'show';
-    $adminReadonly = $readonly;
-    if (!$adminReadonly) {
-        if ($mode == 'create') {
-            $adminReadonly = Auth::user()?->cannot('createAdmin', App\Models\Teacher::class);
-        } elseif ($mode == 'edit') {
-            $adminReadonly = Auth::user()?->cannot('updateAdmin', $teacher);
-        } else {
-            $adminReadonly = true;
-        }
-    }
 @endphp
 <div class="flex flex-wrap space-x-8">
     <div class="grow mt-6 space-y-4">
@@ -35,7 +25,7 @@
         </div>
         <flux:field variant="inline">
             <input type="hidden" name="admin" value="0">
-            <flux:checkbox name="admin" :disabled="$adminReadonly" :checked="old('admin', $teacher->user->admin) == '1'" value="1"/>
+            <flux:checkbox name="admin" :disabled="$readonly" :checked="old('admin', $teacher->user->admin) == '1'" value="1"/>
             <flux:label>Administrador</flux:label>
             <flux:error name="admin" />
         </flux:field>
@@ -47,8 +37,7 @@
             width="md"
             :readonly="$readonly"
             deleteTitle="Delete Photo"
-            :deleteAllow="($mode == 'edit') && ($teacher->user->photo_url)"
-            deleteForm="form_to_delete_photo"
+            :deleteAllow="true"
             :imageUrl="$teacher->user->photoFullUrl"/>
     </div>
 </div>

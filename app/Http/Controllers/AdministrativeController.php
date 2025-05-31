@@ -7,17 +7,10 @@ use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\AdministrativeFormRequest;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class AdministrativeController extends \Illuminate\Routing\Controller
+class AdministrativeController extends Controller
 {
     use \App\Traits\UserPhotoFileStorage;
-    use AuthorizesRequests;
-
-    public function __construct()
-    {
-        $this->authorizeResource(User::class, 'administrative');
-    }
 
     public function index(Request $request): View
     {
@@ -52,16 +45,11 @@ class AdministrativeController extends \Illuminate\Routing\Controller
         $newAdministrative->type = 'A';
         $newAdministrative->name = $validatedData['name'];
         $newAdministrative->email = $validatedData['email'];
-        // Only sets admin field if it has permission  to do it.
-        // Otherwise, admin is false
-        $newAdministrative->admin = $request->user()?->can('createAdmin', User::class)
-            ? $validatedData['admin']
-            : 0;
+        $newAdministrative->admin = $validatedData['admin'];
         $newAdministrative->gender = $validatedData['gender'];
         // Initial password is always 123
         $newAdministrative->password = bcrypt('123');
         $newAdministrative->save();
-        $newAdministrative->sendEmailVerificationNotification();
         // File store is the last thing to execute!
         // Files do not rollback, so the probability of having a pending file 
         // (not referenced by any user) is reduced by being the last operation

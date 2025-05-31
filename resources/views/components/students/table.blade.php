@@ -30,41 +30,29 @@
                 @endif
                 <td class="px-2 py-2 text-left hidden md:table-cell">{{ $student->user->email }}</td>
                 @if($showView)
-                    @can('view', $student)
-                        <td class="ps-2 px-0.5">
-                            <a href="{{ route('students.show', ['student' => $student]) }}">
-                                <flux:icon.eye class="size-5 hover:text-green-600" />
-                            </a>
-                        </td>
-                    @else
-                        <td></td>
-                    @endcan                
+                    <td class="ps-2 px-0.5">
+                        <a href="{{ route('students.show', ['student' => $student]) }}">
+                            <flux:icon.eye class="size-5 hover:text-green-600" />
+                        </a>
+                    </td>
                 @endif
                 @if($showEdit)
-                    @can('update', $student)
-                        <td class="px-0.5">
-                            <a href="{{ route('students.edit', ['student' => $student]) }}">
-                                <flux:icon.pencil-square class="size-5 hover:text-blue-600" />
-                            </a>
-                        </td>
-                    @else
-                        <td></td>
-                    @endcan                
+                    <td class="px-0.5">
+                        <a href="{{ route('students.edit', ['student' => $student]) }}">
+                            <flux:icon.pencil-square class="size-5 hover:text-blue-600" />
+                        </a>
+                    </td>
                 @endif
                 @if($showDelete)
-                    @can('delete', $student)
-                        <td class="px-0.5">
-                            <form method="POST" action="{{ route('students.destroy', ['student' => $student]) }}" class="flex items-center">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit">
-                                    <flux:icon.trash class="size-5 hover:text-red-600" />
-                                </button>
-                            </form>
-                        </td>
-                    @else
-                        <td></td>
-                    @endcan                
+                    <td class="px-0.5">
+                        <form method="POST" action="{{ route('students.destroy', ['student' => $student]) }}" class="flex items-center">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">
+                                <flux:icon.trash class="size-5 hover:text-red-600" />
+                            </button>
+                        </form>
+                    </td>
                 @endif
             </tr>
         @endforeach

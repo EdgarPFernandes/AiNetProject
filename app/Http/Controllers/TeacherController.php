@@ -10,19 +10,10 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\TeacherFormRequest;
 use App\Models\Department;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class TeacherController extends \Illuminate\Routing\Controller
+class TeacherController extends Controller
 {
     use \App\Traits\UserPhotoFileStorage;
-    use AuthorizesRequests;
-
-    public function __construct()
-    {
-        $this->authorizeResource(Teacher::class);
-    }
-
 
     public function index(Request $request): View
     {
@@ -94,9 +85,7 @@ class TeacherController extends \Illuminate\Routing\Controller
             $newUser->type = 'T';
             $newUser->name = $validatedData['name'];
             $newUser->email = $validatedData['email'];
-            $newUser->admin = $request->user()?->can('createAdmin', Teacher::class)
-                ? $validatedData['admin']
-                : 0;
+            $newUser->admin = $validatedData['admin'];
             $newUser->gender = $validatedData['gender'];
             // Initial password is always 123
             $newUser->password =bcrypt('123');
@@ -108,7 +97,6 @@ class TeacherController extends \Illuminate\Routing\Controller
             $newTeacher->extension = $validatedData['extension'];
             $newTeacher->locker = $validatedData['locker'];
             $newTeacher->save();
-            $newTeacher->user->sendEmailVerificationNotification();
             // File store is the last thing to execute!
             // Files do not rollback, so the probability of having a pending file 
             // (not referenced by any user) is reduced by being the last operation
@@ -215,26 +203,5 @@ public function update(TeacherFormRequest $request, Teacher $teacher): RedirectR
         return view('teachers.show')
             ->with('departments', $departments)
             ->with('teacher', $teacher);
-    }
-
-    public function myTeachers(Request $request): View
-    {
-        if ($request->user()?->type == 'S') {
-            $disciplinesIds = $request->user()?->student?->disciplines->pluck('id')?->toArray();
-            if (empty($disciplinesIds)) {
-                return view('teachers.my')->with('teachers', new Collection);
-            }
-        } else {
-            return view('teachers.my')->with('teachers', new Collection);
-        }
-        $teachersID = DB::table('teachers_disciplines')
-            ->whereIntegerInRaw('discipline_id', $disciplinesIds)
-            ->pluck('teacher_id')
-            ->toArray();
-        $teachers =  Teacher::whereIntegerInRaw('id', $teachersID)
-            ->with('user', 'departmentRef')
-            ->paginate(20)
-            ->withQueryString();
-        return view('teachers.my', compact('teachers'));
     }
 }

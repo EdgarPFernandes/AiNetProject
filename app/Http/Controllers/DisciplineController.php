@@ -8,19 +8,9 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\DisciplineFormRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class DisciplineController extends \Illuminate\Routing\Controller
+class DisciplineController extends Controller
 {
-    use AuthorizesRequests;
-
-    public function __construct()
-    {
-        $this->authorizeResource(Discipline::class);
-    }
-
-
     /**
      * Display a listing of the resource.
      */
@@ -97,7 +87,6 @@ class DisciplineController extends \Illuminate\Routing\Controller
         //         ->toArray();
         //     $disciplinesQuery->whereIntegerInRaw('id', $disciplinesIds);
         // }
-        
         // Teacher Filtering - Alternative 2 - uses the relationship
         if ($filterByTeacher !== null) {
             $disciplinesQuery->with('teachers.user')->whereHas(
@@ -226,29 +215,5 @@ class DisciplineController extends \Illuminate\Routing\Controller
         return redirect()->route('disciplines.index')
             ->with('alert-type', $alertType)
             ->with('alert-msg', $alertMsg);
-    }
-
-    public function myDisciplines(Request $request): View
-    {
-        if ($request->user()?->type == 'T') {
-            $idDisciplines = $request->user()?->teacher?->disciplines?->pluck('id')?->toArray();
-            if (empty($idDisciplines)) {
-                return view('disciplines.my')->with('disciplines', new Collection);
-            }
-        } elseif ($request->user()?->type == 'S') {
-            $idDisciplines = $request->user()?->student?->disciplines?->pluck('id')?->toArray();
-            if (empty($idDisciplines)) {
-                return view('disciplines.my')->with('disciplines', new Collection);
-            }
-        } else {
-            return view('disciplines.my')->with('disciplines', new Collection);
-        }
-        $disciplines = Discipline::whereIntegerInRaw('id', $idDisciplines)
-            ->with('courseRef')
-            ->orderBy('year')
-            ->orderBy('semester')
-            ->orderBy('name')
-            ->get();
-        return view('disciplines.my', compact('disciplines'));
     }
 }

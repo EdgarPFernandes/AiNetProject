@@ -5,19 +5,13 @@
         <div class="max-full">
             <section>
                 <div class="static sm:absolute -top-2 right-0 flex flex-wrap justify-start sm:justify-end items-center gap-4">
-                    @can('create', App\Models\Teacher::class)
-                        <flux:button variant="primary" href="{{ route('teachers.create') }}">New</flux:button>
-                    @endcan
-                    @can('view', $teacher)
-                        <flux:button href="{{ route('teachers.show', ['teacher' => $teacher]) }}">View</flux:button>
-                    @endcan
-                    @can('delete', $teacher)
-                        <form method="POST" action="{{ route('teachers.destroy', ['teacher' => $teacher]) }}">
-                            @csrf
-                            @method('DELETE')
-                            <flux:button variant="danger" type="submit">Delete</flux:button>
-                        </form>
-                    @endcan
+                    <flux:button variant="primary" href="{{ route('teachers.create', ['teacher' => $teacher]) }}">New</flux:button>
+                    <flux:button href="{{ route('teachers.show', ['teacher' => $teacher]) }}">View</flux:button>
+                    <form method="POST" action="{{ route('teachers.destroy', ['teacher' => $teacher]) }}">
+                        @csrf
+                        @method('DELETE')
+                        <flux:button variant="danger" type="submit">Delete</flux:button>
+                    </form>
                 </div>
 
                 <form method="POST" action="{{ route('teachers.update', ['teacher' => $teacher]) }}" enctype="multipart/form-data">
@@ -34,10 +28,4 @@
             </section>
         </div>
     </div>
-    <form class="hidden" id="form_to_delete_photo"
-        method="POST" 
-        action="{{ route('teachers.photo.destroy', ['teacher' => $teacher]) }}">
-        @csrf
-        @method('DELETE')
-    </form>
 </x-layouts.main-content>

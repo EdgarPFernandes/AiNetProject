@@ -11,7 +11,7 @@ class CartConfirmationFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()?->can('confirm-cart');
+        return true;
     }
 
     /**

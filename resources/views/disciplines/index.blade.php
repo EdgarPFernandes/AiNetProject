@@ -15,11 +15,9 @@
                     :teacher="old('teacher', $filterByTeacher)"
                     class="mb-6"
                 />
-                @can('create', App\Models\Discipline::class)
-                    <div class="flex items-center gap-4 mb-4">
-                        <flux:button variant="primary" href="{{ route('disciplines.create') }}">Create a new discipline</flux:button>
-                    </div>
-                @endcan
+                <div class="flex items-center gap-4 mb-4">
+                    <flux:button variant="primary" href="{{ route('disciplines.create') }}">Create a new discipline</flux:button>
+                </div>
                 <div class="my-4 font-base text-sm text-gray-700 dark:text-gray-300">
                     <x-disciplines.table :disciplines="$disciplines"
                         :showCourse="true"

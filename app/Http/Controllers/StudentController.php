@@ -10,18 +10,10 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\StudentFormRequest;
 use App\Models\Course;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class StudentController extends \Illuminate\Routing\Controller
+class StudentController extends Controller
 {
     use \App\Traits\UserPhotoFileStorage;
-    use AuthorizesRequests;
-
-    public function __construct()
-    {
-        $this->authorizeResource(Student::class);
-    }
 
     public function index(Request $request): View
     {
@@ -61,7 +53,8 @@ class StudentController extends \Illuminate\Routing\Controller
         // }
 
         $students = $studentsQuery
-            ->with('user', 'courseRef', 'disciplines')
+            ->with('user')
+            ->with('courseRef')
             ->paginate(20)
             ->withQueryString();
 
@@ -102,7 +95,6 @@ class StudentController extends \Illuminate\Routing\Controller
             $newStudent->course = $validatedData['course'];
             $newStudent->number = $validatedData['number'];
             $newStudent->save();
-            $newStudent->user->sendEmailVerificationNotification();
             // File store is the last thing to execute!
             // Files do not rollback, so the probability of having a pending file 
             // (not referenced by any user) is reduced by being the last operation
@@ -204,25 +196,4 @@ class StudentController extends \Illuminate\Routing\Controller
     {
         return view('students.show')->with('student', $student);
     }
-
-    public function myStudents(Request $request): View
-    {
-        if ($request->user()?->type == 'T') {
-            $disciplinesIds = $request->user()?->teacher?->disciplines->pluck('id')?->toArray();
-            if (empty($disciplinesIds)) {
-                return view('students.my')->with('students', new Collection);
-            }
-        } else {
-            return view('students.my')->with('students', new Collection);
-        }
-        $studentsID = DB::table('students_disciplines')
-            ->whereIntegerInRaw('discipline_id', $disciplinesIds)
-            ->pluck('students_id')
-            ->toArray();
-        $students =  Student::whereIntegerInRaw('id', $studentsID)
-            ->with('user', 'courseRef', 'disciplines')
-            ->paginate(20)
-            ->withQueryString();
-        return view('students.my', compact('students'));
-    }    
 }

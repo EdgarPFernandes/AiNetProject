@@ -8,9 +8,8 @@ Route::middleware('guest')->group(function () {
     Volt::route('login', 'auth.login')
         ->name('login');
 
-    // Remove registration    
     Volt::route('register', 'auth.register')
-         ->name('register');
+        ->name('register');
 
     Volt::route('forgot-password', 'auth.forgot-password')
         ->name('password.request');

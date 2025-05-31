@@ -7,18 +7,9 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\DepartmentFormRequest;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class DepartmentController extends \Illuminate\Routing\Controller
+class DepartmentController extends Controller
 {
-    use AuthorizesRequests;
-
-    public function __construct()
-    {
-        $this->authorizeResource(Department::class);
-    }
-
-
     public function index(): View
     {
         return view('departments.index')

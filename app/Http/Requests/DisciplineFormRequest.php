@@ -11,11 +11,7 @@ class DisciplineFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (strtolower($this->getMethod()) == 'post') {
-            return $this->user()?->can('create', \App\Models\Discipline::class);
-        } else {
-            return $this->user()?->can('update', $this->route('discipline'));
-        }
+        return true;
     }
 
     /**
